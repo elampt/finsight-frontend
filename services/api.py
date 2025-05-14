@@ -1,12 +1,26 @@
 import requests
+import os
 import streamlit as st
+from dotenv import load_dotenv
+
+# Load .env file for local development
+load_dotenv()
 
 # Load the API base URL from Streamlit secrets
 # This is typically set in the Streamlit Cloud or local secrets.toml file
-API_BASE_URL = st.secrets["API_BASE_URL"]
+# API_BASE_URL = st.secrets["API_BASE_URL"]
 
 # Uncomment the line below to use a local API for testing
 # API_BASE_URL = "http://localhost:8000"
+
+# Try Streamlit secrets first (for deployed environment), fall back to .env
+try:
+    API_BASE_URL = st.secrets["API_BASE_URL"]
+except (KeyError, FileNotFoundError):
+    API_BASE_URL = os.getenv("API_BASE_URL")
+    if not API_BASE_URL:
+        st.error("API_BASE_URL not found in st.secrets or .env file")
+        st.stop()
 
 
 def signup_user(name, email, password):
