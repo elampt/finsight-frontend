@@ -1,5 +1,5 @@
 import streamlit as st
-from services.api import login_user, signup_user
+from services.api import login_user, signup_user, wake_db
 from custom_pages.holdings import holdings_page
 from custom_pages.sentiment import sentiment_page
 
@@ -32,6 +32,8 @@ def home():
         ["🔑 Login", "📝 Signup"],
         label_visibility="collapsed"
     )
+
+    wake_db()  # Ensure the database is awake
 
     if option == "📝 Signup":
         signup()
@@ -73,6 +75,7 @@ def logout():
     if st.button("Log Out"):
         st.session_state.token = None
         st.rerun()
+
 
 # Main App Logic
 if st.session_state.token:

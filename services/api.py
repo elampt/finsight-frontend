@@ -110,6 +110,21 @@ def get_stock_symbols():
     except Exception as e:
         print(f"Error fetching stock symbols: {e}")
         return []
+    
+
+def wake_db():
+    """
+    Wake up the database by sending a request to the health check endpoint.
+    """
+    try:
+        response = requests.get(f"{API_BASE_URL}/user/health")
+        if response.status_code == 200:
+            print("Database is awake.")
+        else:
+            print(f"Error waking up database: {response.status_code}")
+    except Exception as e:
+        print(f"Error waking up database: {e}")
+
 
     
 def get_news_sentiment(token):
