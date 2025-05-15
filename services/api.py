@@ -126,7 +126,7 @@ def wake_db():
         print(f"Error waking up database: {e}")
 
 
-    
+@st.cache_data(show_spinner=False, ttl=300)  # cache for 5 minutes
 def get_news_sentiment(token):
     try:
         response = requests.get(f"{API_BASE_URL}/holdings/news-sentiment", headers={

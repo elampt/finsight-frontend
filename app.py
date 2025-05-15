@@ -1,7 +1,8 @@
 import streamlit as st
-from services.api import login_user, signup_user, wake_db
+from services.api import login_user, signup_user, wake_db, get_news_sentiment
 from custom_pages.holdings import holdings_page
 from custom_pages.sentiment import sentiment_page
+import threading
 
 # Set the page configuration
 st.set_page_config(
@@ -53,6 +54,11 @@ def signup():
         else:
             st.error("Sign up failed. Please try again.")
 
+
+def preload_data(token):
+    get_news_sentiment(token)  # Preload news sentiment data
+
+
 # Login Page
 def login():
     st.subheader("Login")
@@ -65,6 +71,8 @@ def login():
         if token:
             st.session_state.token = token
             st.session_state.user_email = email  # Store user email in session state
+
+            threading.Thread(target=preload_data, args=(token,), daemon=True).start()
             st.success("Login successful!")
             st.rerun()
         else:
@@ -106,7 +114,8 @@ if st.session_state.token:
     if page == "🏠 Holdings":
         holdings_page()
     elif page == "📰 News Sentiment":
-        sentiment_page()
+        with st.spinner("Loading news sentiment..."):
+            sentiment_page()
 
 else:
     # Show home page if not logged in
