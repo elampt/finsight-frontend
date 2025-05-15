@@ -2,7 +2,6 @@ import streamlit as st
 from services.api import login_user, signup_user, wake_db, get_news_sentiment
 from custom_pages.holdings import holdings_page
 from custom_pages.sentiment import sentiment_page
-import threading
 
 # Set the page configuration
 st.set_page_config(
@@ -10,7 +9,6 @@ st.set_page_config(
     page_icon="logo.png",  # Path to your favicon file
     layout="centered",         # Optional: Set layout to wide
 )
-
 
 # Initialize sesssion state for token
 if "token" not in st.session_state:
@@ -55,8 +53,6 @@ def signup():
             st.error("Sign up failed. Please try again.")
 
 
-def preload_data(token):
-    get_news_sentiment(token)  # Preload news sentiment data
 
 
 # Login Page
@@ -71,8 +67,6 @@ def login():
         if token:
             st.session_state.token = token
             st.session_state.user_email = email  # Store user email in session state
-
-            threading.Thread(target=preload_data, args=(token,), daemon=True).start()
             st.success("Login successful!")
             st.rerun()
         else:
