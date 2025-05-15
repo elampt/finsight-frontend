@@ -33,8 +33,6 @@ def home():
         label_visibility="collapsed"
     )
 
-    wake_db()  # Ensure the database is awake
-
     if option == "📝 Signup":
         signup()
     elif option == "🔑 Login":
@@ -48,6 +46,7 @@ def signup():
     password = st.text_input("Password", type="password")
 
     if st.button("Sign Up"):
+        wake_db()
         response = signup_user(name, email, password)
         if response:
             st.success("Sign up successful! Please log in.")
@@ -61,6 +60,7 @@ def login():
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
+        wake_db()
         token = login_user(email, password)
         if token:
             st.session_state.token = token
