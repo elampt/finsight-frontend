@@ -108,7 +108,7 @@ if st.session_state.token:
     if page == "🏠 Holdings":
         holdings_page()
     elif page == "📰 News Sentiment":
-        with st.spinner("Loading news sentiment..."):
+        with st.spinner("Loading news sentiment... This might take up to a minute."):
             sentiment_page()
 
 else:
